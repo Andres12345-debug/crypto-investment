@@ -5,6 +5,8 @@ import { HistorialPrecios } from "../historial_precios/historial_precios";
 export class Cryptocurrencies {
     @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
     public idCripto: number;
+    @Column({ type: 'varchar', length: 100, nullable: false, name: 'name' })
+    public name: string;
     @Column({ type: 'varchar', length: 100, nullable: false, name: 'symbol' })
     public symbol: string;
     @Column({ type: 'varchar', length: 100, nullable: false, name: 'slug' })

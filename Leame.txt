@@ -21,6 +21,11 @@
     npm i @types/formidable --save-dev
     npm i @types/jsonwebtoken --save-dev
 
+Consumo api
+npm install dotenv
+Axiosnpm install axios
+
+
 Instalar mysql
 npm install mysql2 typeorm typeorm-naming-strategies
 
@@ -32,17 +37,12 @@ npm install mysql2 typeorm typeorm-naming-strategies
     nest g s modulos/privado/usuarios --no-spec
     nest g co modulos/privado/usuarios --no-spec
 
-### Publico ###
+### SERVICIOS ###
 
-    nest g mo modulos/publico
-
-    nest g mo modulos/publico/accesos
-    nest g s modulos/publico/accesos --no-spec
-    nest g co modulos/publico/accesos --no-spec
-
-    nest g mo modulos/publico/registros
-    nest g s modulos/publico/registros --no-spec
-    nest g co modulos/publico/registros --no-spec
+    nest g mo modulos
+    nest g mo modulos/coinmarketcap
+    nest g s modulos/coinmarketcap --no-spec
+    nest g co modulos/coinmarketcap --no-spec
 
 #### Creamos config/conexión ### 
 
