@@ -1,0 +1,64 @@
+# === OUTPUT DIRECTORIES ===
+/dist
+/build
+/backend/dist
+/frontend/build
+
+# === NODE MODULES ===
+/node_modules
+/backend/node_modules
+/frontend/node_modules
+
+# === LOG FILES ===
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# === OS FILES ===
+.DS_Store
+
+# === TESTS & COVERAGE ===
+/coverage
+/.nyc_output
+
+# === IDEs & EDITORS ===
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# === VS CODE ===
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# === ENVIRONMENT VARIABLES ===
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+/backend/.env
+/frontend/.env
+
+# === TEMPORARY FILES ===
+.temp
+.tmp
+
+# === RUNTIME FILES ===
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# === DIAGNOSTIC REPORTS ===
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
