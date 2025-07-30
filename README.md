@@ -15,9 +15,8 @@ cd backend
 npm install
 nest satar --watch
 
-
 ### Frontend
-cd /frontend
+cd frontend
 nom install
 npm start
 
