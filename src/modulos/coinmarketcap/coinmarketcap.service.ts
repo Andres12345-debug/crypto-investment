@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import axios from 'axios';
@@ -9,7 +9,7 @@ import { Cryptocurrencies } from 'src/modelos/cryptocurrencies/cryptocurrencies'
 export class CoinmarketcapService {
     constructor(
         @InjectRepository(Cryptocurrencies)
-        private cryptoRepo: Repository<Cryptocurrencies>,
+        public cryptoRepo: Repository<Cryptocurrencies>,
         @InjectRepository(HistorialPrecios)
         private historyRepo: Repository<HistorialPrecios>,
     ) { }
@@ -48,4 +48,25 @@ export class CoinmarketcapService {
 
         return 'Datos actualizados correctamente.';
     }
+    async obtenerHistorialPorSimbolo(symbol: string) {
+        const cleanSymbol = symbol.trim(); // <-- elimina espacios y saltos de línea
+
+        const cripto = await this.cryptoRepo.findOne({ where: { symbol: cleanSymbol } });
+
+        if (!cripto) {
+            throw new NotFoundException(`Criptomoneda con símbolo '${cleanSymbol}' no encontrada`);
+        }
+
+        const historial = await this.historyRepo.find({
+            where: { criptoId: cripto.idCripto },
+            order: { timestamp: 'DESC' },
+        });
+
+        return {
+            criptomoneda: cleanSymbol,
+            historial,
+        };
+    }
+
+
 }
