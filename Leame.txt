@@ -21,6 +21,10 @@
     npm i @types/formidable --save-dev
     npm i @types/jsonwebtoken --save-dev
 
+Instalar mysql
+npm install mysql2 typeorm typeorm-naming-strategies
+
+
 #### privados  ######
     nest g mo modulos/privado
 
@@ -83,8 +87,8 @@ nest g module config/conexion
         ConexionModule {}
 
 ###### CREACION DE LOS MODELOS #######
-   	nest g cl modelos/usuario --no-spec
-    nest g cl modelos/acceso --no-spec
+   	nest g cl modelos/cryptocurrencies --no-spec
+    nest g cl modelos/historial_precios --no-spec
 
 #### Middleware #####
     nest g cl middleware/seguridad/seguridad --no-spec
@@ -115,7 +119,10 @@ nest g module config/conexion
             }}
 
 ### Se configura tambien el app.module ###
-        
+Para que conozca el .env
+  imports: [ConfigModule.forRoot({isGlobal: true,envFilePath:".env"}), ConexionModule],
+
+  Middleware      
     export class AppModule implements NestModule{
       public configure(consumer: MiddlewareConsumer) {
 

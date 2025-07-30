@@ -1,0 +1,29 @@
+backend-crypto-investment/
+│
+├── src/
+│   ├── controllers/
+│   │   └── crypto.controller.js      # Lógica para manejar las peticiones del frontend
+│   │
+│   ├── services/
+│   │   └── coinmarketcap.service.js  # Lógica para interactuar con la API de CoinMarketCap
+│   │
+│   ├── routes/
+│   │   └── crypto.routes.js          # Definición de rutas relacionadas con criptomonedas
+│   │
+│   ├── models/
+│   │   └── db.js                     # Configuración y conexión a MySQL
+│   │   └── historial.model.js        # Modelo para almacenar historial de precios
+│   │
+│   ├── config/
+│   │   └── config.js                 # Configuraciones generales, como API_KEY, DB credentials
+│   │
+│   ├── cron/
+│   │   └── updatePrices.job.js      # Tarea para guardar precios periódicamente
+│   │
+│   ├── app.js                        # Configura Express, middlewares, rutas
+│   └── server.js                     # Inicia el servidor
+│
+├── .env                              # Variables de entorno (API_KEY, DB info, etc.)
+├── .gitignore
+├── package.json
+└── README.md
