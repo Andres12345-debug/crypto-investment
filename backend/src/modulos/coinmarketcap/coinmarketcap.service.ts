@@ -31,6 +31,8 @@ export class CoinmarketcapService {
                     isActive: true,
                 });
                 await this.cryptoRepo.save(cryptoEntity);
+
+                
             }
 
             const quote = crypto.quote.USD;
@@ -41,6 +43,7 @@ export class CoinmarketcapService {
                 percentChange24h: quote.percent_change_24h,
                 timestamp: new Date(quote.last_updated),
             });
+            
 
 
             await this.historyRepo.save(price);
