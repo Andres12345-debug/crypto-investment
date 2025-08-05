@@ -127,51 +127,61 @@ export const CryptocurrenciesListar = () => {
 
     // Función principal memoizada
     // Modificar consultar para cargar solo las de la página actual
-const consultar = useCallback(async () => {
-    try {
-        const resultado = await ServicioGet.peticionGet(URLS.URL_BASE + URLS.LISTAR);
-        const cryptosBasicas = Array.isArray(resultado) ? resultado : [];
+    const consultar = useCallback(async () => {
+        try {
+            const resultado = await ServicioGet.peticionGet(URLS.URL_BASE + URLS.LISTAR);
+            const cryptosBasicas = Array.isArray(resultado) ? resultado : [];
 
-        // Carga inicial sin datos históricos
-        setArrCryptos(cryptosBasicas);
+            // Filtrar primero si hay búsqueda
+            const cryptosFiltradas = search
+                ? cryptosBasicas.filter(crypto =>
+                    crypto.name.toLowerCase().includes(search.toLowerCase()) ||
+                    crypto.symbol.toLowerCase().includes(search.toLowerCase())
+                )
+                : cryptosBasicas;
 
-        // Cargar datos solo para la página actual
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const cryptosACargar = cryptosBasicas.slice(startIndex, startIndex + itemsPerPage);
-        
-        const datosHistoricos = await Promise.all(
-            cryptosACargar.map(crypto => fetchPrecioCrypto(crypto.symbol))
-        );
+            // Cargar datos solo para la página actual (de los resultados filtrados)
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const cryptosACargar = cryptosFiltradas.slice(startIndex, startIndex + itemsPerPage);
 
-        const cryptosActualizadas = cryptosBasicas.map((crypto, index) => {
-            const loadedIndex = index - startIndex;
-            return {
-                ...crypto,
-                historial: loadedIndex >= 0 && loadedIndex < datosHistoricos.length 
-                    ? {
-                        priceUsd: datosHistoricos[loadedIndex].priceUsd,
-                        volume24h: datosHistoricos[loadedIndex].volume24h,
-                        percentChange24h: datosHistoricos[loadedIndex].percentChange24h,
-                        timestamp: new Date()
-                    } 
-                    : crypto.historial
-            };
-        });
+            const datosHistoricos = await Promise.all(
+                cryptosACargar.map(crypto => fetchPrecioCrypto(crypto.symbol))
+            );
 
-        setArrCryptos(cryptosActualizadas);
-    } catch (error) {
-        console.error("Error al cargar datos:", error);
-    }
-}, [fetchPrecioCrypto, currentPage]); // Añadir currentPage como dependencia
-    const handleSearch = (value: string) => {
-        setSearch(value);
-        setCurrentPage(1);
-    };
+            // Actualizar solo las criptomonedas que se cargaron
+            const cryptosActualizadas = cryptosBasicas.map(crypto => {
+                // Encontrar si esta cripto está en las que acabamos de cargar
+                const loadedCryptoIndex = cryptosACargar.findIndex(c => c.idCripto === crypto.idCripto);
 
+                if (loadedCryptoIndex >= 0) {
+                    return {
+                        ...crypto,
+                        historial: {
+                            priceUsd: datosHistoricos[loadedCryptoIndex].priceUsd,
+                            volume24h: datosHistoricos[loadedCryptoIndex].volume24h,
+                            percentChange24h: datosHistoricos[loadedCryptoIndex].percentChange24h,
+                            timestamp: new Date()
+                        }
+                    };
+                }
+
+                // Mantener los datos históricos existentes si los hay
+                return crypto.historial ? crypto : { ...crypto, historial: undefined };
+            });
+
+            setArrCryptos(cryptosActualizadas);
+        } catch (error) {
+            console.error("Error al cargar datos:", error);
+        }
+    }, [fetchPrecioCrypto, currentPage, search, itemsPerPage]);
     const handleShow = (crypto: cryptocurrencies) => {
         setSelectedCrypto(crypto);
         setShow(true);
         consultarHistorial(crypto.symbol);
+    };
+    const handleSearch = (value: string) => {
+        setSearch(value);
+        setCurrentPage(1); // Resetear a la primera página al buscar
     };
 
     useEffect(() => {
@@ -231,7 +241,7 @@ const consultar = useCallback(async () => {
                             </td>
                             <td>
                                 <Button
-                                    variant="info"
+                                    variant="warning"
                                     size="sm"
                                     onClick={() => handleShow(crypto)}
                                 >
